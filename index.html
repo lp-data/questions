@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>תצוגה מקדימה – שאלון יום 6</title>
+<title>תצוגה מקדימה – שאלון יום 1</title>
 <style>
   :root {
     --page: #f4f5f8;
@@ -14,12 +14,13 @@
     --text: #f2f2f8;
     --muted: #8b8ba3;
     --accent: #6d4fe8;
-    --accent-hover: #8467f5;
-    --selected-bg: #2a2a66;
-    --selected-edge: #5b5be0;
+    --label: #9aa0ff;
     --required: #ef4444;
     --tag-bg: #e3e4ea;
     --tag-text: #5a5a70;
+    --logic-bg: #dbeafe;
+    --logic-text: #1e3a6e;
+    --logic-edge: #a9c8f5;
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; }
@@ -29,205 +30,277 @@
     color: var(--text);
     padding: 24px 16px 64px;
   }
-  .wrap { max-width: 1100px; margin: 0 auto; }
+  .wrap { max-width: 1000px; margin: 0 auto; }
+  .intro {
+    background: #fff;
+    color: #23233a;
+    border: 1px solid #dcdde8;
+    border-radius: 12px;
+    padding: 22px 28px;
+    margin-bottom: 14px;
+    font-size: 15px;
+    line-height: 1.8;
+  }
+  .intro h1 { font-size: 20px; margin: 0 0 4px; }
+  .intro .meta { font-size: 12px; color: #6b6b85; margin-bottom: 14px; }
+  .intro p { margin: 0 0 12px; }
+  .intro p:last-child { margin-bottom: 0; }
+
   .q-tag {
     display: inline-block;
     background: var(--tag-bg);
     color: var(--tag-text);
-    font-size: 10px;
-    padding: 1px 6px;
+    font-size: 11px;
+    padding: 1px 7px;
     border-radius: 3px;
-    margin: 10px 0 4px;
+    margin: 12px 0 4px;
     direction: ltr;
   }
+  .logic {
+    background: var(--logic-bg);
+    color: var(--logic-text);
+    border: 1px solid var(--logic-edge);
+    border-radius: 6px;
+    font-size: 12px;
+    line-height: 1.6;
+    padding: 5px 12px;
+    margin: 0 0 6px;
+  }
+  .logic b { font-weight: 700; }
+  .branch-note { font-size: 12px; color: #6b6b85; margin: 14px 2px 0; }
+
   .card {
     background: var(--card);
     border: 1px solid var(--card-edge);
     border-radius: 12px;
-    padding: 24px 28px 22px;
+    padding: 22px 26px 22px;
   }
-  .q-title {
-    font-size: 15px;
-    font-weight: 700;
-    line-height: 1.6;
-    margin: 0 0 6px;
-  }
+  .label { color: var(--label); font-size: 14px; margin: 0 0 12px; }
+  .q-title { font-size: 15px; font-weight: 700; line-height: 1.7; margin: 0 0 12px; }
   .q-title .req { color: var(--required); margin-inline-start: 6px; }
-  .q-sub { font-size: 14px; font-weight: 600; line-height: 1.6; margin: 10px 0 16px; }
 
-  .opts { display: flex; flex-direction: column; gap: 8px; }
+  video, .quote-img {
+    display: block;
+    width: 100%;
+    max-height: 480px;
+    border-radius: 8px;
+    background: #000;
+    margin-bottom: 8px;
+  }
+  .quote-img { object-fit: contain; }
+  .unlock { display: flex; align-items: center; gap: 10px; font-size: 11px; color: var(--muted); margin-bottom: 14px; direction: ltr; }
+  .unlock i { flex: 1; height: 3px; border-radius: 2px; background: var(--accent); }
+
+  .scale { display: flex; gap: 22px; justify-content: flex-start; padding: 6px 4px 4px; }
+  .scale div { text-align: center; font-size: 12px; color: var(--muted); }
+  .scale .end { height: 16px; margin-bottom: 6px; }
+  .scale span.dot {
+    display: grid; place-items: center;
+    width: 30px; height: 30px; margin: 0 auto;
+    border-radius: 50%; background: var(--row); color: #a0a0b8; font-size: 12px;
+  }
+
   .opt {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    display: flex; align-items: center; gap: 10px;
     background: var(--row);
     border: 1px solid var(--row-edge);
     border-radius: 6px;
     padding: 11px 14px;
     font-size: 13px;
-    cursor: pointer;
-    user-select: none;
-    transition: background .15s, border-color .15s;
+    margin-bottom: 8px;
   }
-  .opt:hover { border-color: #3b3b63; }
-  .opt.on { background: var(--selected-bg); border-color: var(--selected-edge); }
-  .opt input { display: none; }
-  .box {
-    width: 13px; height: 13px;
-    border: 1.5px solid #9a9ab4;
-    border-radius: 2px;
-    display: grid; place-items: center;
-    flex: none;
-  }
-  .opt.on .box { background: #fff; border-color: #fff; }
-  .opt.on .box::after {
-    content: "";
-    width: 6px; height: 3px;
-    border-inline-start: 2px solid var(--selected-bg);
-    border-bottom: 2px solid var(--selected-bg);
-    transform: rotate(-45deg) translate(1px, -1px);
-  }
-  .opt:focus-within { outline: 2px solid var(--accent-hover); outline-offset: 2px; }
+  .opt .box { width: 13px; height: 13px; border: 1.5px solid #9a9ab4; border-radius: 2px; flex: none; }
+  .opts-count { font-size: 11px; color: var(--muted); margin: 4px 0 0; }
 
-  textarea, .pts {
-    width: 100%;
+  .text-area {
     background: var(--row);
-    color: var(--text);
     border: 1px solid var(--row-edge);
     border-radius: 6px;
-    font: inherit;
-    font-size: 13px;
+    min-height: 76px;
     padding: 12px 14px;
-    direction: rtl;
+    font-size: 13px;
+    color: #6b6b85;
   }
-  textarea { min-height: 76px; resize: vertical; }
-  textarea::placeholder, .pts::placeholder { color: var(--muted); }
-  textarea:focus, .pts:focus { outline: 2px solid var(--accent-hover); outline-offset: 1px; }
-  .pts { margin: -2px 0 2px; }
-  .pts[hidden] { display: none; }
 
-  .counter { font-size: 10px; color: var(--muted); margin-top: 10px; text-align: left; direction: ltr; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { font-weight: 400; color: var(--muted); font-size: 12px; padding: 4px 6px 10px; text-align: center; }
+  th:first-child, td:first-child { text-align: right; }
+  tbody tr:nth-child(odd) { background: #171728; }
+  td { padding: 10px 8px; text-align: center; }
+  td:first-child { color: var(--text); }
+  .radio { display: inline-block; width: 18px; height: 18px; border: 1.5px solid #3b3b63; border-radius: 50%; }
+  .table-wrap { overflow-x: auto; }
+  .table-wrap table { min-width: 640px; }
+
   .submit {
+    display: inline-block;
     margin-top: 14px;
     background: var(--accent);
     color: #fff;
-    border: 0;
-    border-radius: 6px;
-    font: inherit;
     font-size: 12px;
     font-weight: 600;
-    padding: 9px 22px;
-    cursor: pointer;
-    display: block;
-    margin-inline-end: auto;
+    padding: 8px 20px;
+    border-radius: 6px;
   }
-  .submit:hover { background: var(--accent-hover); }
-  .submit:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
-  .submit.done { background: #2f9e6e; }
   .note { text-align: center; color: #7b7b92; font-size: 12px; margin-top: 28px; }
-  @media (max-width: 600px) { .card { padding: 18px 16px; } }
+  @media (max-width: 600px) { .card { padding: 16px; } .intro { padding: 16px; } }
 </style>
 </head>
 <body>
-<main class="wrap" id="app"></main>
+<main class="wrap">
 
-<script>
-/* ===== עריכה: כאן מגדירים את השאלון ===== */
-const SURVEY = [
-  {
-    id: "Q1",
-    type: "allocate",
-    title: "יש לך 10 נקודות לחלק בין המפלגות שאתה/ה שוקל/ת להצביע להן. ככל שאתה/ה בטוח/ה יותר שתצביע/י למפלגה מסוימת – תן/י לה יותר נקודות. כמה נקודות תתן/י לכל אחת?",
-    subtitle: "אנא בחר/י קודם בשם המפלגה ואז כתוב/י את מספר הנקודות שתעניק/י לה",
-    max: 10,
-    options: [
-      "הדמוקרטים", "הליכוד", "ישר!", "ישראל ביתנו", "ביחד", "עוצמה יהודית",
-      "הציונות הדתית", "כחול לבן", "הכלכלית-המילואימניקים", "ש\"ס", "רע\"מ",
-      "הרשימה המאוחדת", "עמך ישראל"
-    ]
-  },
-  { id: "Q2", type: "open", title: "איזו עצה היית נותן לגולן כדי לשכנע אנשים כמוך להצביע לו?" },
-  { id: "Q3", type: "open", title: "איזו עצה היית נותן לבנט כדי לשכנע אנשים כמוך להצביע לו?" },
-  { id: "Q4", type: "open", title: "איזו עצה היית נותן לאיזנקוט כדי לשכנע אנשים כמוך להצביע לו?" },
-  {
-    id: "Q5",
-    type: "open",
-    title: "תודה על השתתפותך! נשמח לשמוע איך הייתה החוויה שלך מהפאנל בשבועות האחרונים, למה התחברת יותר ולמה פחות? האם יש משהו שישפיע על הנכונות שלך להשתתף שוב בעתיד?"
-  }
-];
-/* ======================================= */
+  <section class="intro">
+    <h1>יום 1</h1>
+    <div class="meta">12 שאלות · 12 חובה · 2 נקודות הסתעפות לפי לוגיקה</div>
+    <p>תודה שהצטרפת ללייב פאנל בעוסק בצעירים בישראל.</p>
+    <p>תשובותיך מסייעות לנו לשמוע את קול הצעירים בישראל ולכן חשוב לנו כי התשובות ישקפו את העמדות שלכם. אין תשובות נכונות או לא נכונות, ושני משפטים במילים שלכם שווים לנו יותר מפסקה מלוטשת.</p>
+    <p>אנחנו קוראים כל תשובה ונשמח לשמוע את קולכם.</p>
+  </section>
 
-const app = document.getElementById("app");
+  <div class="q-tag">Q1</div>
+  <section class="card">
+    <p class="label">צפה/י בסרטון הבא:</p>
+    <video controls preload="metadata" playsinline src="https://hivemind-media.s3.us-east-1.amazonaws.com/3e2d49a33e1341c395eedb48cca5166b.mp4"></video>
+    <div class="unlock">to unlock 01:05 <i></i></div>
+    <p class="q-title">עד כמה הנושא של חקירת אירועי ה-7.10 מעסיק או מטריד אותך?<span class="req">*</span></p>
+    <div class="scale">
+      <div><div class="end">בכלל לא</div><span class="dot">1</span></div>
+      <div><div class="end"></div><span class="dot">2</span></div>
+      <div><div class="end"></div><span class="dot">3</span></div>
+      <div><div class="end"></div><span class="dot">4</span></div>
+      <div><div class="end">מעסיק מאוד</div><span class="dot">5</span></div>
+    </div>
+    <span class="submit">Submit</span>
+  </section>
 
-function el(tag, attrs = {}, ...kids) {
-  const n = document.createElement(tag);
-  for (const [k, v] of Object.entries(attrs)) {
-    if (k === "class") n.className = v;
-    else if (k === "text") n.textContent = v;
-    else n.setAttribute(k, v);
-  }
-  kids.forEach(k => n.append(k));
-  return n;
-}
+  <div class="q-tag">Q2</div>
+  <section class="card">
+    <p class="q-title">לדעתך, הנושא של המילואימניקים הוא נושא שרוב הישראלים מסכימים עליו, או שגם הוא מפלג? למה?<span class="req">*</span></p>
+    <div class="text-area">הקלד/י את תשובתך כאן</div>
+    <span class="submit">Submit</span>
+  </section>
 
-function titleEl(q) {
-  const h = el("p", { class: "q-title" });
-  h.append(document.createTextNode(q.title));
-  h.append(el("span", { class: "req", text: "*" }));
-  return h;
-}
+  <div class="q-tag">Q3</div>
+  <section class="card">
+    <p class="q-title">אם היו עולים עוד פרקים בסדרה הזו, היית ממשיך/ה לצפות? מה היה גורם לך לעצור עליהם בפיד, ומה היה גורם לך לגלול הלאה?<span class="req">*</span></p>
+    <div class="text-area">הקלד/י את תשובתך כאן</div>
+    <span class="submit">Submit</span>
+  </section>
 
-function submitBtn() {
-  const b = el("button", { class: "submit", type: "button", text: "Submit" });
-  b.addEventListener("click", () => {
-    b.textContent = "Submitted";
-    b.classList.add("done");
-    setTimeout(() => { b.textContent = "Submit"; b.classList.remove("done"); }, 1400);
-  });
-  return b;
-}
+  <div class="q-tag">Q4</div>
+  <section class="card">
+    <p class="label">צפה/י בקטע הבא:</p>
+    <video controls preload="metadata" playsinline src="https://hivemind-media.s3.us-east-1.amazonaws.com/7a83c16feeca487fb63ac5335cff1f6f.mp4"></video>
+    <div class="unlock">to unlock 00:23 <i></i></div>
+    <p class="q-title">במשפט אחד, מה המסר שהסרטון ניסה להעביר לדעתך? ואם היית יכול/ה לשנות בו דבר אחד, מה היית משנה?<span class="req">*</span></p>
+    <div class="text-area">הקלד/י את תשובתך כאן</div>
+    <span class="submit">Submit</span>
+  </section>
 
-function renderAllocate(q) {
-  const card = el("section", { class: "card" });
-  card.append(titleEl(q));
-  card.append(el("p", { class: "q-sub", text: q.subtitle }));
-  const list = el("div", { class: "opts" });
-  const counter = el("div", { class: "counter" });
-  const update = () => {
-    const n = list.querySelectorAll(".opt.on").length;
-    counter.textContent = n + " of " + q.max + " selected";
-  };
-  q.options.forEach(name => {
-    const cb = el("input", { type: "checkbox" });
-    const row = el("label", { class: "opt" }, cb, el("span", { class: "box" }), el("span", { text: name }));
-    const pts = el("input", { class: "pts", type: "text", inputmode: "numeric", placeholder: "נא לפרט (חובה)" });
-    pts.hidden = true;
-    cb.addEventListener("change", () => {
-      row.classList.toggle("on", cb.checked);
-      pts.hidden = !cb.checked;
-      if (cb.checked) pts.focus(); else pts.value = "";
-      update();
-    });
-    list.append(row, pts);
-  });
-  update();
-  card.append(list, counter, submitBtn());
-  return card;
-}
+  <div class="q-tag">Q5</div>
+  <section class="card">
+    <p class="q-title">אם היית נתקל/ת בסרטון הזה בפיד, מה סביר שהיית עושה?<span class="req">*</span></p>
+    <div class="opt">צופה עד הסוף</div>
+    <div class="opt">גולל/ת הלאה כמעט מיד</div>
+    <div class="opt">צופה בחלק ממנו ואז ממשיך/ה הלאה</div>
+    <span class="submit">Submit</span>
+  </section>
 
-function renderOpen(q) {
-  const card = el("section", { class: "card" });
-  card.append(titleEl(q));
-  card.append(el("textarea", { placeholder: "הקלד/י את תשובתך כאן", "aria-label": q.title }));
-  card.append(submitBtn());
-  return card;
-}
+  <p class="branch-note">הסתעפות 1: לפי התשובה ב-Q5 המשיב רואה את Q6 או את Q7, לא את שתיהן.</p>
 
-SURVEY.forEach(q => {
-  app.append(el("div", { class: "q-tag", text: q.id }));
-  app.append(q.type === "allocate" ? renderAllocate(q) : renderOpen(q));
-});
-app.append(el("p", { class: "note", text: "תצוגה מקדימה בלבד – התשובות אינן נשמרות" }));
-</script>
+  <div class="q-tag">Q6</div>
+  <div class="logic"><b>Logic:</b> מוצגת רק אם Q5 = "גולל/ת הלאה כמעט מיד" או "צופה בחלק ממנו ואז ממשיך/ה הלאה"</div>
+  <section class="card">
+    <p class="q-title">מה מהדברים הבאים גרם לך לרצות לגלול הלאה? (אפשר לבחור כמה)<span class="req">*</span></p>
+    <div class="opt"><span class="box"></span>הפתיחה לא תפסה אותי</div>
+    <div class="opt"><span class="box"></span>הקצב איטי מדי</div>
+    <div class="opt"><span class="box"></span>הקצב מהיר מדי, קשה לעקוב</div>
+    <div class="opt"><span class="box"></span>לא היה ברור מה המסר</div>
+    <div class="opt"><span class="box"></span>הנושא לא מעניין אותי</div>
+    <div class="opt"><span class="box"></span>זה ארוך מדי</div>
+    <div class="opt"><span class="box"></span>לא התחברתי לדובר</div>
+    <div class="opt"><span class="box"></span>אחר, פרט/י:</div>
+    <p class="opts-count" dir="ltr">selected 0</p>
+    <span class="submit">Submit</span>
+  </section>
+
+  <div class="q-tag">Q7</div>
+  <div class="logic"><b>Logic:</b> מוצגת רק אם Q5 = "צופה עד הסוף"</div>
+  <section class="card">
+    <p class="q-title">מה משך אותך בסרטון? (אפשר לבחור כמה)<span class="req">*</span></p>
+    <div class="opt"><span class="box"></span>הפתיחה תפסה אותי</div>
+    <div class="opt"><span class="box"></span>הדמות שמדברת</div>
+    <div class="opt"><span class="box"></span>הקצב והעריכה</div>
+    <div class="opt"><span class="box"></span>המסר ברור וחד</div>
+    <div class="opt"><span class="box"></span>הנושא מעניין אותי</div>
+    <div class="opt"><span class="box"></span>זה קצר ולעניין</div>
+    <div class="opt"><span class="box"></span>אני מסכים/ה עם המסר</div>
+    <div class="opt"><span class="box"></span>אחר, פרט/י:</div>
+    <p class="opts-count" dir="ltr">selected 0</p>
+    <span class="submit">Submit</span>
+  </section>
+
+  <div class="q-tag">Q8</div>
+  <section class="card">
+    <p class="label">צפה/י בסרטון הבא:</p>
+    <video controls preload="metadata" playsinline src="https://hivemind-media.s3.us-east-1.amazonaws.com/b098c89f8ae64906829fb14d2a2ba8e2.mp4"></video>
+    <div class="unlock">to unlock 01:04 <i></i></div>
+    <p class="q-title">עד כמה את/ה מסכים/ה עם כל אחד מהמשפטים הבאים?<span class="req">*</span></p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th></th><th>מסכים/ה מאוד</th><th>מסכים/ה</th><th>ככה ככה</th><th>לא מסכים/ה</th><th>בכלל לא מסכים/ה</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>השיחות בסרטון מרגישות אמיתיות ולא מבוימות</td><td><span class="radio"></span></td><td><span class="radio"></span></td><td><span class="radio"></span></td><td><span class="radio"></span></td><td><span class="radio"></span></td></tr>
+          <tr><td>האנשים בסרטון מייצגים את כל הקשת הישראלית</td><td><span class="radio"></span></td><td><span class="radio"></span></td><td><span class="radio"></span></td><td><span class="radio"></span></td><td><span class="radio"></span></td></tr>
+          <tr><td>זה תוכן שמעניין אנשים בגילי</td><td><span class="radio"></span></td><td><span class="radio"></span></td><td><span class="radio"></span></td><td><span class="radio"></span></td><td><span class="radio"></span></td></tr>
+          <tr><td>הייתי רוצה לראות עוד סרטונים כאלה</td><td><span class="radio"></span></td><td><span class="radio"></span></td><td><span class="radio"></span></td><td><span class="radio"></span></td><td><span class="radio"></span></td></tr>
+          <tr><td>המראיין ניהל את הראיונות בצורה נעימה</td><td><span class="radio"></span></td><td><span class="radio"></span></td><td><span class="radio"></span></td><td><span class="radio"></span></td><td><span class="radio"></span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <span class="submit">Submit</span>
+  </section>
+
+  <div class="q-tag">Q9</div>
+  <section class="card">
+    <p class="q-title">זה סוג תוכן שהיית שולח/ת לחבר או חברה? למה כן או למה לא?<span class="req">*</span></p>
+    <div class="text-area">הקלד/י את תשובתך כאן</div>
+    <span class="submit">Submit</span>
+  </section>
+
+  <div class="q-tag">Q10</div>
+  <section class="card">
+    <p class="label">להלן ציטוט של אריה דרעי שפורסם בחדשות:</p>
+    <img class="quote-img" alt="ציטוט של אריה דרעי" src="https://hivemind-media.s3.us-east-1.amazonaws.com/c5c426eadd294c4197651406aa626b9c.jpeg">
+    <p class="q-title">אחרי שקראת את דבריו של דרעי, מה עמדתך לגבי ישיבה בממשלה עם המפלגות החרדיות?<span class="req">*</span></p>
+    <div class="opt">בעד</div>
+    <div class="opt">בעד, אבל עם תנאים</div>
+    <div class="opt">נגד</div>
+    <div class="opt">לא בטוח/ה</div>
+    <span class="submit">Submit</span>
+  </section>
+
+  <p class="branch-note">הסתעפות 2: לפי התשובה ב-Q10 המשיב רואה את Q11 או את Q12, לא את שתיהן.</p>
+
+  <div class="q-tag">Q11</div>
+  <div class="logic"><b>Logic:</b> מוצגת רק אם Q10 = "בעד", "בעד, אבל עם תנאים" או "לא בטוח/ה"</div>
+  <section class="card">
+    <p class="q-title">איזו אמירה או מעשה של המפלגות החרדיות היו גורמים לך לחשוב שהן לא לגיטימיות לישיבה בממשלה?<span class="req">*</span></p>
+    <div class="text-area">הקלד/י את תשובתך כאן</div>
+    <span class="submit">Submit</span>
+  </section>
+
+  <div class="q-tag">Q12</div>
+  <div class="logic"><b>Logic:</b> מוצגת רק אם Q10 = "נגד"</div>
+  <section class="card">
+    <p class="q-title">עד כמה הנושא של ישיבה עם החרדים ישפיע על ההחלטה שלך למי להצביע, ולמה?<span class="req">*</span></p>
+    <div class="text-area">הקלד/י את תשובתך כאן</div>
+    <span class="submit">Submit</span>
+  </section>
+
+  <p class="note">תצוגה מקדימה בלבד – התשובות אינן נשמרות</p>
+</main>
 </body>
 </html>
