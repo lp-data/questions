@@ -280,9 +280,13 @@ h2 { font-weight: 500; font-size: clamp(19px, 2.4cqw, 34px); line-height: 1.25; 
 .sum { display: flex; gap: 1.4cqw; align-items: baseline; font-size: clamp(13px, 1.85cqw, 26px); line-height: 1.55; color: var(--ink-2); }
 .sum b { color: var(--ink); font-weight: 600; }
 .sum .sn { flex: none; width: 2.6cqw; height: 2.6cqw; border-radius: 50%; display: inline-grid; place-items: center; background: var(--brand); color: #fff; font-size: .8em; }
-.tbar { position: absolute; top: .9cqw; inset-inline: 5cqw; z-index: 2; display: flex; gap: 2.4cqw; font-size: clamp(9px, 1.05cqw, 14px); line-height: 1; color: var(--ink-2); border-bottom: 1px solid color-mix(in srgb, var(--rule) 70%, transparent); pointer-events: none; }
-.tbar span { padding: 0 .1cqw .55cqw; opacity: .5; white-space: nowrap; border-bottom: 1.5px solid transparent; margin-bottom: -1px; }
-.tbar span.on { opacity: 1; color: var(--ink); font-weight: 600; border-bottom-color: var(--brand); }
+.tbar { position: absolute; top: 0; inset-inline: 0; height: 2.9cqw; z-index: 2; display: flex; background: color-mix(in srgb, var(--ink) 4%, transparent); border-bottom: 1px solid var(--rule); pointer-events: none; }
+.tbar span { flex: 1; display: flex; align-items: center; justify-content: center; position: relative; font-size: clamp(10px, 1.3cqw, 18px); line-height: 1; color: var(--ink-2); white-space: nowrap; }
+.tbar span + span { border-inline-start: 1px solid color-mix(in srgb, var(--rule) 70%, transparent); }
+.tbar span.on { color: var(--ink); font-weight: 700; background: var(--paper); }
+.tbar span.on::after { content: ''; position: absolute; inset-inline: 0; bottom: -1px; height: .28cqw; background: var(--brand); }
+.slide:has(.tbar) { padding-top: 4.6cqw; }
+.slide:has(.tbar) .ptag { top: 3.7cqw; }
 .chapdots { position: absolute; left: 2.4cqw; top: 1.3cqw; z-index: 2; display: inline-flex; gap: .4cqw; direction: rtl; } .chapdots i { width: 1.9cqw; height: .6cqw; border-radius: 3px; background: var(--rule); } .chapdots i.on { background: var(--brand); }
 
 .ptag { position: absolute; left: 2.4cqw; top: 1.6cqw; z-index: 2; font-size: clamp(9px, .95cqw, 13px); letter-spacing: .04em; color: var(--brand-deep); background: color-mix(in srgb, var(--paper) 55%, var(--brand-soft)); border-radius: 3px; padding: .35cqw .9cqw; }
